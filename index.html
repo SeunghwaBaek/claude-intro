@@ -5,38 +5,93 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude 소개 (테스트)</title>
   <style>
-    .test-banner {
-      background: #f59e0b;
-      color: #1a1a1a;
-      text-align: center;
-      padding: 10px 16px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0f0f0f;
+      --bg2: #141414;
+      --bg3: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --text2: #aaa;
+      --text3: #888;
+      --text4: #666;
+      --header-bg1: #1a1a2e;
+      --header-bg2: #0f0f0f;
+      --accent: #d97757;
+      --accent-hover: #c96442;
     }
 
-    .test-banner span {
-      margin: 0 8px;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    body.light {
+      --bg: #f8f8f8;
+      --bg2: #efefef;
+      --bg3: #ffffff;
+      --border: #ddd;
+      --text: #111;
+      --text2: #444;
+      --text3: #666;
+      --text4: #999;
+      --header-bg1: #e8eaf6;
+      --header-bg2: #f8f8f8;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f0f;
-      color: #e8e8e8;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
     }
 
+    /* 상단 컨트롤 바 */
+    .top-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+    }
+
+    .test-badge {
+      background: #f59e0b;
+      color: #1a1a1a;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-toggle {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      font-weight: 500;
+    }
+
+    .btn-toggle:hover {
+      border-color: var(--accent);
+    }
+
+    /* 헤더 */
     header {
       padding: 80px 24px 60px;
       text-align: center;
-      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f0f 100%);
+      background: linear-gradient(180deg, var(--header-bg1) 0%, var(--header-bg2) 100%);
     }
 
     .logo {
@@ -55,7 +110,7 @@
       font-size: 3rem;
       font-weight: 700;
       letter-spacing: -1px;
-      background: linear-gradient(135deg, #ffffff, #d97757);
+      background: linear-gradient(135deg, var(--text), #d97757);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -64,7 +119,7 @@
 
     .tagline {
       font-size: 1.25rem;
-      color: #888;
+      color: var(--text3);
       max-width: 480px;
       margin: 0 auto 40px;
     }
@@ -72,7 +127,7 @@
     .cta-btn {
       display: inline-block;
       padding: 14px 32px;
-      background: #d97757;
+      background: var(--accent);
       color: white;
       text-decoration: none;
       border-radius: 10px;
@@ -82,10 +137,11 @@
     }
 
     .cta-btn:hover {
-      background: #c96442;
+      background: var(--accent-hover);
       transform: translateY(-1px);
     }
 
+    /* 섹션 */
     section {
       max-width: 960px;
       margin: 0 auto;
@@ -97,7 +153,7 @@
       font-weight: 600;
       margin-bottom: 40px;
       text-align: center;
-      color: #fff;
+      color: var(--text);
     }
 
     .cards {
@@ -106,40 +162,37 @@
       gap: 20px;
     }
 
+    /* 스크롤 애니메이션 */
     .card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
+      background: var(--bg3);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 32px 28px;
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, opacity 0.5s, translate 0.5s;
+      opacity: 0;
+      translate: 0 30px;
+    }
+
+    .card.visible {
+      opacity: 1;
+      translate: 0 0;
     }
 
     .card:hover {
-      border-color: #d97757;
+      border-color: var(--accent);
       transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(217, 119, 87, 0.15);
     }
 
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 16px;
-    }
+    .card-icon { font-size: 2rem; margin-bottom: 16px; }
+    .card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+    .card p { color: var(--text3); font-size: 0.95rem; }
 
-    .card h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-
-    .card p {
-      color: #888;
-      font-size: 0.95rem;
-    }
-
+    /* About */
     .about {
-      background: #141414;
-      border-top: 1px solid #2a2a2a;
-      border-bottom: 1px solid #2a2a2a;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
     .about-inner {
@@ -149,16 +202,8 @@
       text-align: center;
     }
 
-    .about-inner p {
-      font-size: 1.1rem;
-      color: #aaa;
-      margin-bottom: 16px;
-    }
-
-    .highlight {
-      color: #d97757;
-      font-weight: 600;
-    }
+    .about-inner p { font-size: 1.1rem; color: var(--text2); margin-bottom: 16px; }
+    .highlight { color: var(--accent); font-weight: 600; }
 
     .stats {
       display: flex;
@@ -168,102 +213,106 @@
       flex-wrap: wrap;
     }
 
-    .stat {
-      text-align: center;
-    }
+    .stat { text-align: center; }
 
     .stat .number {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #d97757;
+      color: var(--accent);
       display: block;
     }
 
-    .stat .label {
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 4px;
-    }
+    .stat .label { font-size: 0.9rem; color: var(--text4); margin-top: 4px; }
 
     footer {
       text-align: center;
       padding: 40px 24px;
-      color: #444;
+      color: var(--text4);
       font-size: 0.9rem;
     }
 
-    footer a {
-      color: #d97757;
-      text-decoration: none;
-    }
+    footer a { color: var(--accent); text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <div class="test-banner">
-    ⚠️ <span>이 페이지는 테스트용입니다 · This is a test page</span> ⚠️
+  <!-- 상단 컨트롤 바 -->
+  <div class="top-bar">
+    <span class="test-badge">⚠️ TEST PAGE</span>
+    <div class="controls">
+      <button class="btn-toggle" id="langBtn" onclick="toggleLang()">🌐 English</button>
+      <button class="btn-toggle" id="themeBtn" onclick="toggleTheme()">☀️ 라이트</button>
+    </div>
   </div>
 
   <header>
     <div class="logo">🤖</div>
     <h1>Claude</h1>
-    <p class="tagline">Anthropic이 만든 AI 어시스턴트. 더 안전하고, 더 유용하며, 더 정직한 AI.</p>
-    <a href="https://claude.ai" class="cta-btn">Claude 사용해보기</a>
+    <p class="tagline" data-ko="Anthropic이 만든 AI 어시스턴트. 더 안전하고, 더 유용하며, 더 정직한 AI." data-en="AI assistant by Anthropic. Safer, more useful, and more honest AI.">
+      Anthropic이 만든 AI 어시스턴트. 더 안전하고, 더 유용하며, 더 정직한 AI.
+    </p>
+    <a href="https://claude.ai" class="cta-btn" data-ko="Claude 사용해보기" data-en="Try Claude">Claude 사용해보기</a>
   </header>
 
   <section>
-    <h2 class="section-title">Claude가 할 수 있는 것들</h2>
+    <h2 class="section-title" data-ko="Claude가 할 수 있는 것들" data-en="What Claude Can Do">Claude가 할 수 있는 것들</h2>
     <div class="cards">
       <div class="card">
         <div class="card-icon">✍️</div>
-        <h3>글쓰기 & 편집</h3>
-        <p>에세이, 보고서, 이메일, 창작물까지 다양한 문서를 작성하고 다듬어드립니다.</p>
+        <h3 data-ko="글쓰기 & 편집" data-en="Writing & Editing">글쓰기 & 편집</h3>
+        <p data-ko="에세이, 보고서, 이메일, 창작물까지 다양한 문서를 작성하고 다듬어드립니다." data-en="Write and refine essays, reports, emails, and creative works.">에세이, 보고서, 이메일, 창작물까지 다양한 문서를 작성하고 다듬어드립니다.</p>
       </div>
       <div class="card">
         <div class="card-icon">💻</div>
-        <h3>코딩 & 디버깅</h3>
-        <p>Python, JavaScript, Java 등 다양한 언어로 코드를 작성하고 버그를 찾아 고칩니다.</p>
+        <h3 data-ko="코딩 & 디버깅" data-en="Coding & Debugging">코딩 & 디버깅</h3>
+        <p data-ko="Python, JavaScript, Java 등 다양한 언어로 코드를 작성하고 버그를 찾아 고칩니다." data-en="Write code and fix bugs in Python, JavaScript, Java, and more.">Python, JavaScript, Java 등 다양한 언어로 코드를 작성하고 버그를 찾아 고칩니다.</p>
       </div>
       <div class="card">
         <div class="card-icon">🔍</div>
-        <h3>분석 & 리서치</h3>
-        <p>복잡한 주제를 쉽게 설명하고, 데이터를 분석하며, 깊이 있는 인사이트를 제공합니다.</p>
+        <h3 data-ko="분석 & 리서치" data-en="Analysis & Research">분석 & 리서치</h3>
+        <p data-ko="복잡한 주제를 쉽게 설명하고, 데이터를 분석하며, 깊이 있는 인사이트를 제공합니다." data-en="Break down complex topics, analyze data, and provide deep insights.">복잡한 주제를 쉽게 설명하고, 데이터를 분석하며, 깊이 있는 인사이트를 제공합니다.</p>
       </div>
       <div class="card">
         <div class="card-icon">🧮</div>
-        <h3>수학 & 논리</h3>
-        <p>수학 문제 풀이, 논리적 추론, 단계별 계산 설명을 제공합니다.</p>
+        <h3 data-ko="수학 & 논리" data-en="Math & Logic">수학 & 논리</h3>
+        <p data-ko="수학 문제 풀이, 논리적 추론, 단계별 계산 설명을 제공합니다." data-en="Solve math problems, reason logically, and explain step-by-step.">수학 문제 풀이, 논리적 추론, 단계별 계산 설명을 제공합니다.</p>
       </div>
       <div class="card">
         <div class="card-icon">🌐</div>
-        <h3>다국어 지원</h3>
-        <p>한국어를 포함한 여러 언어로 자연스럽게 대화하고 번역합니다.</p>
+        <h3 data-ko="다국어 지원" data-en="Multilingual">다국어 지원</h3>
+        <p data-ko="한국어를 포함한 여러 언어로 자연스럽게 대화하고 번역합니다." data-en="Naturally converse and translate across many languages including Korean.">한국어를 포함한 여러 언어로 자연스럽게 대화하고 번역합니다.</p>
       </div>
       <div class="card">
         <div class="card-icon">🎓</div>
-        <h3>학습 & 교육</h3>
-        <p>개념을 쉽게 풀어 설명하고, 질문에 답하며, 학습을 도와드립니다.</p>
+        <h3 data-ko="학습 & 교육" data-en="Learning & Education">학습 & 교육</h3>
+        <p data-ko="개념을 쉽게 풀어 설명하고, 질문에 답하며, 학습을 도와드립니다." data-en="Explain concepts clearly, answer questions, and support learning.">개념을 쉽게 풀어 설명하고, 질문에 답하며, 학습을 도와드립니다.</p>
       </div>
     </div>
   </section>
 
   <div class="about">
     <div class="about-inner">
-      <h2 class="section-title">Claude에 대하여</h2>
-      <p>Claude는 <span class="highlight">Anthropic</span>이 개발한 AI 어시스턴트입니다. Constitutional AI 기술을 기반으로 안전성과 유용성을 함께 추구하며 설계되었습니다.</p>
-      <p>단순한 질문 응답을 넘어, 복잡한 작업을 함께 수행하고 깊이 있는 대화를 나눌 수 있는 파트너입니다.</p>
+      <h2 class="section-title" data-ko="Claude에 대하여" data-en="About Claude">Claude에 대하여</h2>
+      <p data-ko="Claude는 <span class='highlight'>Anthropic</span>이 개발한 AI 어시스턴트입니다. Constitutional AI 기술을 기반으로 안전성과 유용성을 함께 추구하며 설계되었습니다."
+         data-en="Claude is an AI assistant developed by <span class='highlight'>Anthropic</span>, designed to be safe and helpful using Constitutional AI technology.">
+        Claude는 <span class="highlight">Anthropic</span>이 개발한 AI 어시스턴트입니다. Constitutional AI 기술을 기반으로 안전성과 유용성을 함께 추구하며 설계되었습니다.
+      </p>
+      <p data-ko="단순한 질문 응답을 넘어, 복잡한 작업을 함께 수행하고 깊이 있는 대화를 나눌 수 있는 파트너입니다."
+         data-en="Beyond simple Q&A, Claude is a partner for complex tasks and meaningful conversations.">
+        단순한 질문 응답을 넘어, 복잡한 작업을 함께 수행하고 깊이 있는 대화를 나눌 수 있는 파트너입니다.
+      </p>
       <div class="stats">
         <div class="stat">
           <span class="number">100+</span>
-          <span class="label">지원 언어</span>
+          <span class="label" data-ko="지원 언어" data-en="Languages">지원 언어</span>
         </div>
         <div class="stat">
           <span class="number">200K</span>
-          <span class="label">컨텍스트 토큰</span>
+          <span class="label" data-ko="컨텍스트 토큰" data-en="Context Tokens">컨텍스트 토큰</span>
         </div>
         <div class="stat">
           <span class="number">24/7</span>
-          <span class="label">언제든 사용 가능</span>
+          <span class="label" data-ko="언제든 사용 가능" data-en="Always Available">언제든 사용 가능</span>
         </div>
       </div>
     </div>
@@ -273,5 +322,39 @@
     <p>Made with ❤️ · Powered by <a href="https://anthropic.com">Anthropic</a></p>
   </footer>
 
+  <script>
+    // 언어 전환
+    let isKo = true;
+    function toggleLang() {
+      isKo = !isKo;
+      const lang = isKo ? 'ko' : 'en';
+      document.documentElement.lang = lang;
+      document.getElementById('langBtn').textContent = isKo ? '🌐 English' : '🌐 한국어';
+
+      document.querySelectorAll('[data-ko]').forEach(el => {
+        const text = el.getAttribute('data-' + lang);
+        if (text) el.innerHTML = text;
+      });
+    }
+
+    // 다크/라이트 모드
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle('light', !isDark);
+      document.getElementById('themeBtn').textContent = isDark ? '☀️ 라이트' : '🌙 다크';
+    }
+
+    // 스크롤 애니메이션
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card').forEach(card => observer.observe(card));
+  </script>
 </body>
 </html>
